@@ -4,20 +4,20 @@ import {Message} from '../types';
 import crypto from 'crypto';
 
 const messagesRouter = Router();
-const path = '../messages';
+const path = './messages';
 messagesRouter.get('/', async (req, res) => {
   const files = await fs.readdir(path);
   const recentFiles = files.slice(-5);
   
-  const messages = await Promise.all(
+  const messages: Message[] = await Promise.all(
     recentFiles.map(async (file) => {
       const filePath = `${path}/${file}`;
       const content = await fs.readFile(filePath, 'utf-8');
-      return JSON.parse(content);
+      const message = JSON.parse(content);
+      return {...message};
     })
   );
-  
-  res.json(messages);
+  res.send(messages);
 })
 
 messagesRouter.post('/', async (req, res) => {
