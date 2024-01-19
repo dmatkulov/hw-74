@@ -36,7 +36,7 @@ messagesRouter.post('/', async (req, res) => {
       message: req.body.message,
       datetime,
     };
-    
+    await fs.mkdir('./messages', {recursive: true});
     await fs.writeFile(filePath, JSON.stringify(message));
     res.send(message);
   } catch (error) {
